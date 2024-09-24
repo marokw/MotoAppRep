@@ -1,4 +1,6 @@
-﻿using MotoApp.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using MotoApp.Entities;
+using MotoApp.Repositories;
 
 namespace MotoApp.Repositories
 {
@@ -29,7 +31,7 @@ namespace MotoApp.Repositories
 
         public void Save()
         {
-            throw new NotSupportedException();
+            //throw new NotSupportedException();
         }
     }
 }

@@ -5,7 +5,7 @@ namespace MotoApp.Repositories;
 public interface IReadRepository<out T> where T : class, IEntity
 {
     IEnumerable<T> GetAll();
-    T GetById(int id);
+    T? GetById(int id);
 }
 
 public interface IWriteRepository<in T> where T : class, IEntity
