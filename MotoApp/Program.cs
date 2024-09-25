@@ -9,7 +9,8 @@ services.AddSingleton<IApp, App>();
 services.AddSingleton<IRepository<Employee>, ListRepository<Employee>>();
 //servivces.AddSingleton<IRepository<Employee>, SqlRepository<Employee>>();
 services.AddSingleton<IRepository<Car>, ListRepository<Car>>();
-services.AddSingleton<ICarsProvider, CarsProviderBasic>();
+services.AddSingleton<ICarsProvider, CarsProvider>();
+//services.AddSingleton<ICarsProvider, CarsProviderBasic>();
 
 
 var serviceProvider = services.BuildServiceProvider();

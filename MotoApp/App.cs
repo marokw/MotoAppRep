@@ -55,7 +55,7 @@ namespace MotoApp
                 _carsRepository.Add(car);
             }
 
-            foreach(var car in _carsProvider.FilterCars(150000))
+            foreach(var car in _carsProvider.WhereCostIsGreaterThan(150000))
             {
                 Console.WriteLine(car);
             }

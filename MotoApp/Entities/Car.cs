@@ -1,8 +1,7 @@
 ﻿using MotoApp.Entities;
 using System.Text;
 
-namespace MotoApp.Entities
-{
+namespace MotoApp.Entities;
     public class Car : EntityBase
     {
         public string Name { get; set; }
@@ -35,7 +34,7 @@ namespace MotoApp.Entities
         }
         #endregion
     }
-}
+
 
 
 //public class Car
