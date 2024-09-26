@@ -1,11 +1,12 @@
-﻿using MotoApp.Entities;
+﻿using MotoApp.Data.Entities;
+using MotoApp.Data.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MotoApp.Repositories.Extensions
+namespace MotoApp.Data.Repositories.Extensions
 {
     public static class RepositoryExtensions
     {

@@ -1,10 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MotoApp.Entities;
-using MotoApp.Repositories;
+using MotoApp.Data.Entities;
 
-namespace MotoApp.Repositories
+namespace MotoApp.Data.Repositories
 {
-    public class ListRepository<T>  : IRepository<T> where T : class, IEntity, new()
+    public class ListRepository<T> : IRepository<T> where T : class, IEntity, new()
     {
         private readonly List<T> _items = new();
 

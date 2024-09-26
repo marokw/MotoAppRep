@@ -1,11 +1,49 @@
-﻿using MotoApp.DataProviders;
-using MotoApp.Entities;
-using MotoApp.Repositories;
+﻿using MotoApp.Components.CsvReader;
+using MotoApp.Components.DataProviders;
+using MotoApp.Data.Entities;
+using MotoApp.Data.Repositories;
 
 namespace MotoApp
 {
     public class App : IApp
     {
+        private readonly ICsvReader _csvReader;
+
+        public App(ICsvReader csvReader)
+        {
+            _csvReader = csvReader;
+
+        }
+
+        public void Run()
+        {
+            var cars = _csvReader.ProcessCars("Resources\\Files\\fuel.csv");
+            var manufscturers = _csvReader.ProcessCars("Resources\\Files\\manufscturers.csv");
+
+            var groups = cars.GroupBy(x => x.Manufacturer).Select(g => new
+            {
+                Name = g.Key,
+                Max = g.Max(c=>c.Combined),
+                Average= g.Average(c=>c.Combined)
+            }
+            ).OrderBy(x=>x.Average);
+
+
+            foreach(var car in cars)
+            {
+                if(car.Manufacturer == "Volkswagen")
+                Console.WriteLine(car);
+            }
+
+            foreach (var group in groups)
+            {
+                Console.WriteLine($"{group.Name}");
+                Console.WriteLine($"\t Max:{group.Max}");
+                Console.WriteLine($"\t Average: {group.Average:F2}");
+            }
+        }
+
+/*
         private readonly IRepository<Employee> _employeesRepository;
         private readonly IRepository<Car> _carsRepository;
         private readonly ICarsProvider _carsProvider;
@@ -100,5 +138,6 @@ namespace MotoApp
 
             };
         }
+*/
     }
 }

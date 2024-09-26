@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Drawing;
 using System.Text;
+using MotoApp.Components.DataProviders.Extensions;
+using MotoApp.Data.Entities;
+using MotoApp.Data.Repositories;
 
-namespace MotoApp.DataProviders;
+namespace MotoApp.Components.DataProviders;
 
 public class CarsProvider : ICarsProvider
 {
@@ -132,7 +135,7 @@ public class CarsProvider : ICarsProvider
     public Car FirstOrDefaultByColorWitchDefault(string color)
     {
         var cars = _carRepository.GetAll();
-        return cars.FirstOrDefault(x => x.Color == color, new Car { Id = -1, Name = "NOT FOUND"});
+        return cars.FirstOrDefault(x => x.Color == color, new Car { Id = -1, Name = "NOT FOUND" });
     }
 
     public Car LastByColor(string color)
@@ -175,7 +178,7 @@ public class CarsProvider : ICarsProvider
         var cars = _carRepository.GetAll();
         return cars
             .OrderBy(x => x.Name)
-            .TakeWhile(x=>x.Name.StartsWith(prefix))
+            .TakeWhile(x => x.Name.StartsWith(prefix))
             .ToList();
     }
 
@@ -201,7 +204,7 @@ public class CarsProvider : ICarsProvider
     {
         var cars = _carRepository.GetAll();
         return cars
-            .Select(x=>x.Color)
+            .Select(x => x.Color)
             .Distinct()
             .OrderBy(c => c)
             .ToList();

@@ -5,7 +5,7 @@ VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MotoApp", "MotoApp\MotoApp.csproj", "{7AC1C422-2AC7-4D4E-BA33-F21DFE7041D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MotoApp.NUnitTests", "MotoApp.NUnitTests\MotoApp.NUnitTests.csproj", "{C633B69A-4F9D-402A-90A9-1F881B5E51AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MotoApp.NUnitTests", "MotoApp.NUnitTests\MotoApp.NUnitTests.csproj", "{C633B69A-4F9D-402A-90A9-1F881B5E51AF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
