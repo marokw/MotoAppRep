@@ -16,11 +16,11 @@ services.AddSingleton<ICarsProvider, CarsProvider>();
 services.AddSingleton<ICsvReader, CsvReader>();
 
 var serviceProvider = services.BuildServiceProvider();
-var app = serviceProvider.GetService<IApp>();
+var app = serviceProvider.GetService<IApp>()!;
 app.Run();
 
 
-
+//Data Source=DESKTOP-DPHMGLJ\SQLEXPRESS;Initial Catalog=TestStorage;Integrated Security=True;Encrypt=True;Trust Server Certificate=True
 
 
 
