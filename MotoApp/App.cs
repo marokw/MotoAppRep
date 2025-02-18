@@ -3,6 +3,7 @@ using MotoApp.Components.CsvReader.Models;
 using MotoApp.Components.DataProviders;
 using MotoApp.Data.Entities;
 using MotoApp.Data.Repositories;
+using System.Xml.Linq;
 
 namespace MotoApp
 {
@@ -68,29 +69,67 @@ namespace MotoApp
             //}
             //Console.WriteLine("--------------------");
 
-            var groups = manufacturers.GroupJoin(
-                cars,
-                manufacturer => manufacturer.Name,
-                car => car.Manufacturer,
-                (m, g) =>
-                new
-                {
-                    Manufacturer = m,
-                    Cars = g
-                })
-                .OrderBy(x => x.Manufacturer.Name);
+            //var groups = manufacturers.GroupJoin(
+            //    cars,
+            //    manufacturer => manufacturer.Name,
+            //    car => car.Manufacturer,
+            //    (m, g) =>
+            //    new
+            //    {
+            //        Manufacturer = m,
+            //        Cars = g
+            //    })
+            //    .OrderBy(x => x.Manufacturer.Name);
 
-            Console.WriteLine("--------------------");
-            foreach (var group in groups)
+            //Console.WriteLine("--------------------");
+            //foreach (var group in groups)
+            //{
+            //    Console.WriteLine($"Manufacturer: {group.Manufacturer.Name}");
+            //    Console.WriteLine($"\t Cars: {group.Cars.Count()}");
+            //    Console.WriteLine($"\t Max:{group.Cars.Max(x=>x.Combined)}");
+            //    Console.WriteLine($"\t Min: {group.Cars.Min(x => x.Combined)}");
+            //    Console.WriteLine($"\t Avg:{group.Cars.Average(x => x.Combined)}");
+            //    Console.WriteLine();
+            //}
+            //Console.WriteLine("--------------------");
+
+            CreateXml();
+            QueryXml();
+           
+            
+        }
+
+        private static void QueryXml()
+        {
+            var document = XDocument.Load("fuel.xml");
+            var names = document
+                .Element("Cars")?
+                .Elements("Car")
+                .Where(x=>x.Attribute("Manufacturer")?.Value == "BMW")
+                .Select(x => x.Attribute("Name")?.Value);
+
+            foreach (var name in names)
             {
-                Console.WriteLine($"Manufacturer: {group.Manufacturer.Name}");
-                Console.WriteLine($"\t Cars: {group.Cars.Count()}");
-                Console.WriteLine($"\t Max:{group.Cars.Max(x=>x.Combined)}");
-                Console.WriteLine($"\t Min: {group.Cars.Min(x => x.Combined)}");
-                Console.WriteLine($"\t Avg:{group.Cars.Average(x => x.Combined)}");
-                Console.WriteLine();
+                Console.WriteLine(name);
             }
-            Console.WriteLine("--------------------");
+        }
+
+        private void CreateXml()
+        {
+            var records = _csvReader.ProcessCars("Resources\\Files\\fuel.csv");
+
+            var document = new XDocument();  //z System.Xml.Linq
+            var cars = new XElement("Cars", records
+                    .Select(x =>
+                        new XElement("Car",
+                            new XAttribute("Name", x.Name),
+                            new XAttribute("Combined", x.Combined),
+                            new XAttribute("Manufacturer", x.Manufacturer)
+                            )
+                    ));
+
+            document.Add(cars);
+            document.Save("fuel.xml"); //będzie w folderze Bin/Debug/net8.0/
         }
 
         /*
