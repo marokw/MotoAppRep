@@ -1,4 +1,5 @@
 ﻿using MotoApp.Components.CsvReader;
+using MotoApp.Components.CsvReader.Models;
 using MotoApp.Components.DataProviders;
 using MotoApp.Data.Entities;
 using MotoApp.Data.Repositories;
@@ -44,26 +45,50 @@ namespace MotoApp
             //    Console.WriteLine($"\t Average: {group.Average:F2}");
             //}
 
-            var carsInCountry = cars.Join(
-                manufacturers,
-                x => x.Manufacturer,
-                x => x.Name,
-                (car, manufacturer) =>
-                    new
-                    {
-                        manufacturer.Country,
-                        car.Name,
-                        car.Combined
-                    })
-                .OrderByDescending(x => x.Combined)
-                .ThenBy(x => x.Name);
-            
+            //var carsInCountry = cars.Join(
+            //    manufacturers,
+            //    c => new {c.Manufacturer, c.Year},
+            //    m=> new {Manufacturer = m.Name, m.Year},
+            //    (car, manufacturer) =>
+            //        new
+            //        {
+            //            manufacturer.Country,
+            //            car.Name,
+            //            car.Combined
+            //        })
+            //    .OrderByDescending(x => x.Combined)
+            //    .ThenBy(x => x.Name);
+
+            //Console.WriteLine("--------------------");
+            //foreach (var car in carsInCountry)
+            //{
+            //    Console.WriteLine($"Country: {car.Country}");
+            //    Console.WriteLine($"\t Name:{car.Name}");
+            //    Console.WriteLine($"\t Combined: {car.Combined}");
+            //}
+            //Console.WriteLine("--------------------");
+
+            var groups = manufacturers.GroupJoin(
+                cars,
+                manufacturer => manufacturer.Name,
+                car => car.Manufacturer,
+                (m, g) =>
+                new
+                {
+                    Manufacturer = m,
+                    Cars = g
+                })
+                .OrderBy(x => x.Manufacturer.Name);
+
             Console.WriteLine("--------------------");
-            foreach (var car in carsInCountry)
+            foreach (var group in groups)
             {
-                Console.WriteLine($"Country: {car.Country}");
-                Console.WriteLine($"\t Name:{car.Name}");
-                Console.WriteLine($"\t Combined: {car.Combined}");
+                Console.WriteLine($"Manufacturer: {group.Manufacturer.Name}");
+                Console.WriteLine($"\t Cars: {group.Cars.Count()}");
+                Console.WriteLine($"\t Max:{group.Cars.Max(x=>x.Combined)}");
+                Console.WriteLine($"\t Min: {group.Cars.Min(x => x.Combined)}");
+                Console.WriteLine($"\t Avg:{group.Cars.Average(x => x.Combined)}");
+                Console.WriteLine();
             }
             Console.WriteLine("--------------------");
         }
