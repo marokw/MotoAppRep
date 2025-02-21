@@ -1,6 +1,6 @@
 ﻿using MotoApp.Components.CsvReader;
 using MotoApp.Components.CsvReader.Models;
-using MotoApp.Components.DataProviders;
+using MotoApp.Data;
 using MotoApp.Data.Entities;
 using MotoApp.Data.Repositories;
 using System.Xml.Linq;
@@ -10,17 +10,29 @@ namespace MotoApp
     public class App : IApp
     {
         private readonly ICsvReader _csvReader;
+        private readonly MotoAppDbContext _motoAppDbContext;
 
-        public App(ICsvReader csvReader)
+        public App(ICsvReader csvReader, MotoAppDbContext motoAppDbContext)
         {
             _csvReader = csvReader;
-
+            _motoAppDbContext = motoAppDbContext;
+            _motoAppDbContext.Database.EnsureCreated();
         }
 
         public void Run()
         {
-            var cars = _csvReader.ProcessCars("Resources\\Files\\fuel.csv");
-            var manufacturers = _csvReader.ProcessManufacturers("Resources\\Files\\manufacturers.csv");
+            //var cars = _csvReader.ProcessCars("Resources\\Files\\fuel.csv");
+            //var manufacturers = _csvReader.ProcessManufacturers("Resources\\Files\\manufacturers.csv");
+
+            //InsertData();
+            //ReadAllCarsFromDb();
+            ReadGroupedCarsFromDb();
+
+            //var cayman = ReadFirst("Cayman S");
+            //cayman.Name = "Mój Samochód";
+            //_motoAppDbContext.SaveChanges();
+            //_motoAppDbContext.Cars.Remove(cayman);
+            //_motoAppDbContext.SaveChanges();
 
             //var groups = cars
             //    .GroupBy(x => x.Manufacturer)
@@ -93,10 +105,71 @@ namespace MotoApp
             //}
             //Console.WriteLine("--------------------");
 
-            CreateXml();
-            QueryXml();
-           
-            
+            //CreateXml();
+            //QueryXml();
+
+
+        }
+
+        private void InsertData()
+        {
+            var cars = _csvReader.ProcessCars("Resources\\Files\\fuel.csv");
+
+            foreach (var car in cars)
+            {
+                _motoAppDbContext.Cars.Add(new Data.Entities.Car()
+                {
+                    Manufacturer = car.Manufacturer,
+                    Name = car.Name,
+                    Year = car.Year,
+                    City = car.City,
+                    Combined = car.Combined,
+                    Cylinders = car.Cylinders,
+                    Displacement = car.Displacement,
+                    Highway = car.Highway
+                }
+
+                    );
+            }
+            _motoAppDbContext.SaveChanges();
+        }
+
+        private void ReadAllCarsFromDb()
+        {
+            var carsFromDb = _motoAppDbContext.Cars.ToList();
+
+            foreach (var carFromDb in carsFromDb)
+            {
+                Console.WriteLine($"\t{carFromDb.Name}:  {carFromDb.Combined}");
+            }
+        }
+
+        private void ReadGroupedCarsFromDb()
+        {
+            var groups = _motoAppDbContext.Cars
+                .GroupBy(x => x.Manufacturer)
+                .Select(x => new
+                {
+                    Name = x.Key,
+                    Cars = x.ToList()
+                })
+                .ToList();
+
+            foreach(var group in groups)
+            {
+                Console.WriteLine(group.Name);
+                Console.WriteLine("========");
+                foreach(var car in group.Cars)
+                {
+                    Console.WriteLine($"\t{car.Name}: {car.Combined}");
+                }
+                Console.WriteLine();
+            }
+        }
+
+        private MotoApp.Data.Entities.Car? ReadFirst(string name)
+        {
+            return _motoAppDbContext.Cars.FirstOrDefault(x=>x.Name == name);
         }
 
         private static void QueryXml()

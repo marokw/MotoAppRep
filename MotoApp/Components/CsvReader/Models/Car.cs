@@ -14,6 +14,7 @@ public class Car
     public int Highway { get; set; }
     public int Combined { get; set; }
 
+    #region
     public override string ToString()
     {
         StringBuilder sb = new(1024);
@@ -28,5 +29,6 @@ public class Car
 
         return sb.ToString();
     }
+    #endregion
 
 }
