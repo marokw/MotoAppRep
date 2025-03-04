@@ -9,7 +9,7 @@ namespace MotoApp
 {
     public class App : IApp
     {
-        private readonly ICsvReader _csvReader;
+        private readonly ICsvReader  _csvReader;
         private readonly MotoAppDbContext _motoAppDbContext;
 
         public App(ICsvReader csvReader, MotoAppDbContext motoAppDbContext)
